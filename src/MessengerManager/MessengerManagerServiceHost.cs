@@ -88,6 +88,8 @@ namespace MessengerManager
         }
         public virtual void AddServices(IServiceCollection serviceCollection)
         {
+            AddRepositories(serviceCollection);
+            
             AddTelegramHandlers(serviceCollection);
         }
 
