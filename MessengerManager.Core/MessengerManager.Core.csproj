@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <UserSecretsId>c3273cc6-3122-4221-963c-86704986165f</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Telegram.Bot" Version="16.0.2" />
+      <PackageReference Include="VkNet" Version="1.66.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Models\Messengers\Shared" />
+      <Folder Include="Models\Messengers\Telegram" />
+      <Folder Include="Models\Messengers\Vk" />
+    </ItemGroup>
+
+</Project>

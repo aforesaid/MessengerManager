@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessengerManager", "MessengerManager\MessengerManager.csproj", "{0EA96D41-4098-4F0D-A66C-30A7F0E01543}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessengerManager.Core", "MessengerManager.Core\MessengerManager.Core.csproj", "{8E6673D5-12E7-440D-AD5E-8953CE6BAEAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessengerManager.Interfaces", "MessengerManager.Interfaces\MessengerManager.Interfaces.csproj", "{3F2BFD97-6191-4B44-A62E-8FD9A9B40D2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessengerManager.Tests", "MessengerManager.Tests\MessengerManager.Tests.csproj", "{C2C2EDF6-0726-4EB9-9EBE-D2DCFF4A1692}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0EA96D41-4098-4F0D-A66C-30A7F0E01543}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EA96D41-4098-4F0D-A66C-30A7F0E01543}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EA96D41-4098-4F0D-A66C-30A7F0E01543}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EA96D41-4098-4F0D-A66C-30A7F0E01543}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E6673D5-12E7-440D-AD5E-8953CE6BAEAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E6673D5-12E7-440D-AD5E-8953CE6BAEAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E6673D5-12E7-440D-AD5E-8953CE6BAEAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E6673D5-12E7-440D-AD5E-8953CE6BAEAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F2BFD97-6191-4B44-A62E-8FD9A9B40D2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F2BFD97-6191-4B44-A62E-8FD9A9B40D2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F2BFD97-6191-4B44-A62E-8FD9A9B40D2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F2BFD97-6191-4B44-A62E-8FD9A9B40D2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2C2EDF6-0726-4EB9-9EBE-D2DCFF4A1692}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2C2EDF6-0726-4EB9-9EBE-D2DCFF4A1692}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2C2EDF6-0726-4EB9-9EBE-D2DCFF4A1692}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2C2EDF6-0726-4EB9-9EBE-D2DCFF4A1692}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

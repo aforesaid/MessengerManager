@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <UserSecretsId>c9a9794e-94f0-47ee-a032-b8eb9a044907</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="IntegrationTests" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MessengerManager.Core\MessengerManager.Core.csproj" />
+    </ItemGroup>
+
+</Project>
