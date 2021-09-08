@@ -16,19 +16,16 @@ namespace MessengerManager.Core.Services.TelegramManager
         private readonly ITelegramBotClient _telegramBotClient;
         private readonly TelegramConfiguration _telegramConfiguration;
         private readonly IGenericRepository<ChatThreadEntity> _chatThreadRepository;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<TelegramBotManager> _logger;
 
         public TelegramBotManager(ITelegramBotClient telegramBotClient, 
             ILogger<TelegramBotManager> logger,
             IGenericRepository<ChatThreadEntity> chatThreadRepository, 
-            IUnitOfWork unitOfWork, 
             IOptions<TelegramConfiguration> telegramConfiguration)
         {
             _telegramBotClient = telegramBotClient;
             _logger = logger;
             _chatThreadRepository = chatThreadRepository;
-            _unitOfWork = unitOfWork;
             _telegramConfiguration = telegramConfiguration.Value;
         }
 

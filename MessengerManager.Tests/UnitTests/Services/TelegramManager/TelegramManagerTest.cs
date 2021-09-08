@@ -38,15 +38,13 @@ namespace MessengerManager.Tests.UnitTests.Services.TelegramManager
         public async Task SendMessage()
         {
             await Setup();
-            var request = new ApiMessage("TestMessage#2", _telegramConfiguration.MainChatId);
+            var request = new ApiMessage("text", "text", "text", DateTime.Now);
             var messageId = await _telegramBotManager.SendMessage(request);
-            request = new ApiMessage("ResponseMessage#2", _telegramConfiguration.MainChatId, messageId);
-            await _telegramBotManager.SendMessage(request);
             Console.ReadKey();
         }
         private async Task Setup()
         {
-            var handler = new TelegramMessageHandler(Options.Create(_telegramConfiguration));
+            var handler = new TelegramMessageHandler();
             Task.Run(async () => await BaseTelegramHandler.StartHandler(_telegramBotClient, UpdateType.Message,
                 handler.UpdateHandler,
                 handler.ErrorHandler));

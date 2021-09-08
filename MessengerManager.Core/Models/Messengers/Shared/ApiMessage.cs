@@ -4,9 +4,8 @@ namespace MessengerManager.Core.Models.Messengers.Shared
 {
     public class ApiMessage
     {
-        public ApiMessage(DateTime date)
+        public ApiMessage()
         {
-            Date = date;
         }
 
         public ApiMessage(string from, 
