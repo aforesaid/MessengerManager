@@ -5,14 +5,14 @@ namespace MessengerManager.Core.Models.Messengers.Shared
     public class ApiMessage
     {
         public ApiMessage()
-        {
-        }
+        {}
 
         public ApiMessage(string from, 
             string text, 
             string chatName,
             DateTime date)
         {
+            From = from;
             Text = text;
             ChatName = chatName;
             Date = date;

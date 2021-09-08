@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using MessengerManager.Core.Configurations.Telegram;
 using MessengerManager.Core.Handlers.TelegramHandlers;
@@ -8,7 +7,6 @@ using MessengerManager.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
