@@ -1,9 +1,10 @@
 ﻿using MessengerManager.Domain.Entities;
+using MessengerManager.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace MessengerManager.Infrastructure.Data
 {
-    public class MessengerManagerDbContext : DbContext
+    public class MessengerManagerDbContext : DbContext, IUnitOfWork
     {
         public DbSet<ChatThreadEntity> ChatThreads { get; protected set; }
         public MessengerManagerDbContext() : base()
@@ -32,5 +33,7 @@ namespace MessengerManager.Infrastructure.Data
             
             base.OnModelCreating(modelBuilder);
         }
+        
+        //TODO: запечатать изменения
     }
 }
