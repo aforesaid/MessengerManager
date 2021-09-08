@@ -31,7 +31,9 @@ namespace MessengerManager.Tests.UnitTests.Services.TelegramManager
             
             _telegramBotClient = new TelegramBotClient(config["telegramToken"]);
             var option = Options.Create(_telegramConfiguration);
-            _telegramBotManager = new TelegramBotManager(_telegramBotClient, mockLogger.Object);
+            
+            //TODO: домочить тесты
+            _telegramBotManager = new TelegramBotManager(_telegramBotClient, mockLogger.Object, null, null);
         }
 
         [Fact]
@@ -44,7 +46,8 @@ namespace MessengerManager.Tests.UnitTests.Services.TelegramManager
         }
         private async Task Setup()
         {
-            var handler = new TelegramMessageHandler();
+            //TODO: допилить mock
+            var handler = new TelegramMessageHandler(null, null, null);
             Task.Run(async () => await BaseTelegramHandler.StartHandler(_telegramBotClient, UpdateType.Message,
                 handler.UpdateHandler,
                 handler.ErrorHandler));
