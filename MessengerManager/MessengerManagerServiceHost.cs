@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using MessengerManager.Core.Configurations.Telegram;
+using MessengerManager.Core.Handlers.TelegramHandlers;
+using MessengerManager.Domain.Interfaces;
 using MessengerManager.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
+using Telegram.Bot;
 
 namespace MessengerManager
 {
@@ -30,7 +36,7 @@ namespace MessengerManager
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
             
-            ConfigureDbContext();
+            await ConfigureDbContext(serviceCollection);
             
             
             ConfigureHandlers();
@@ -54,20 +60,36 @@ namespace MessengerManager
                 opt.UseNpgsql(_configuration["POSTGRESQL"]);
             });
         }
-
-        public virtual void AddServices(IServiceCollection serviceCollection)
+        
+        public virtual async Task ConfigureDbContext(IServiceCollection serviceCollection)
         {
-            
-        }
-
-        public virtual void ConfigureDbContext()
-        {
-            
+            serviceCollection.AddScoped<IUnitOfWork>(x => x.GetRequiredService<MessengerManagerDbContext>());
+                
+            var dbContext = ServiceProvider.GetRequiredService<MessengerManagerDbContext>();
+            await dbContext.Database.MigrateAsync();
         }
 
         public virtual void ConfigureHandlers()
         {
             
+        }
+        public virtual void AddServices(IServiceCollection serviceCollection)
+        {
+            AddTelegramHandlers(serviceCollection);
+        }
+
+        private void AddTelegramHandlers(IServiceCollection serviceCollection)
+        {
+            var telegramConfiguration = _configuration.GetSection(TelegramConfiguration.ConfigName)
+                .Get<TelegramConfiguration>();
+
+            serviceCollection.AddOptions<TelegramConfiguration>(TelegramConfiguration.ConfigName);
+
+            var telegramClient = new TelegramBotClient(telegramConfiguration.Token);
+
+            serviceCollection.AddSingleton<ITelegramBotClient>(telegramClient);
+
+            serviceCollection.AddSingleton<TelegramMessageHandler>();
         }
     }
 }
