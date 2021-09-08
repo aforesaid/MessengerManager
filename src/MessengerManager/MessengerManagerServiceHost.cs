@@ -65,6 +65,8 @@ namespace MessengerManager
         public virtual void AddRepositories(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IGenericRepository<ChatThreadEntity>, EfGenericRepository<ChatThreadEntity>>();
+            serviceCollection.AddScoped<IGenericRepository<MessageEntity>, EfGenericRepository<MessageEntity>>();
+
         }
         
         public virtual async Task ConfigureDbContext(IServiceCollection serviceCollection)
