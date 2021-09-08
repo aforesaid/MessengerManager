@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MessengerManager.Core.Configurations.Telegram;
 using MessengerManager.Core.Handlers.TelegramHandlers;
+using MessengerManager.Domain.Entities;
 using MessengerManager.Domain.Interfaces;
 using MessengerManager.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,9 @@ namespace MessengerManager
 {
     public class MessengerManagerServiceHost
     {
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
-        public IServiceProvider ServiceProvider { get; private set; }
+        private IServiceProvider ServiceProvider { get; set; }
 
         public MessengerManagerServiceHost(IConfiguration configuration)
         {
@@ -58,6 +59,11 @@ namespace MessengerManager
                 opt.UseNpgsql(_configuration["POSTGRESQL"]);
             });
         }
+
+        public virtual void AddRepositories(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<IGenericRepository<ChatThreadEntity>, EfGenericRepository<ChatThreadEntity>>();
+        }
         
         public virtual async Task ConfigureDbContext(IServiceCollection serviceCollection)
         {
@@ -65,12 +71,11 @@ namespace MessengerManager
                 
             var dbContext = ServiceProvider.GetRequiredService<MessengerManagerDbContext>();
             await dbContext.Database.MigrateAsync();
-            
         }
 
         public async Task ConfigureHandlers()
         {
-            var telegramBotClient = ServiceProvider.GetRequiredService<TelegramBotClient>();
+            var telegramBotClient = ServiceProvider.GetRequiredService<ITelegramBotClient>();
             var telegramMessageHandler = ServiceProvider.GetRequiredService<TelegramMessageHandler>();
 
             var tasks = new[]
