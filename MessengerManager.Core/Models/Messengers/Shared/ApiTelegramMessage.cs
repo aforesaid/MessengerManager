@@ -1,21 +1,21 @@
 ﻿namespace MessengerManager.Core.Models.Messengers.Shared
 {
-    public class ApiMessage
+    public class ApiTelegramMessage
     {
-        public ApiMessage()
-        { }
+        public ApiTelegramMessage()
+        {
+        }
 
-        public ApiMessage(string text, 
-            string chatName,
-            string chatId)
+        public ApiTelegramMessage(string text, 
+            string chatId, int? replyMessageId = null)
         {
             Text = text;
-            ChatName = chatName;
             ChatId = chatId;
+            ReplyMessageId = replyMessageId;
         }
         public string Text { get; set; }
-        public string ChatName { get; set; }
         public string ChatId { get; set; }
+        public int? ReplyMessageId { get; set; }
 
 
         public override string ToString()
