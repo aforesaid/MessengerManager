@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Telegram.Bot;
+using Serilog;
 
 namespace MessengerManager
 {
@@ -27,12 +26,20 @@ namespace MessengerManager
             AddServices(serviceCollection);
 
             ConfigureDbContext(serviceCollection);
+            
+            
             ConfigureHandlers(serviceCollection);
         }
 
         public virtual void AddLogging(IServiceCollection serviceCollection)
         {
-            
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.WithProperty("APP", "OZON-CONNECTOR")
+                .WriteTo.Console()
+                .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+                .MinimumLevel.Override("IdentityServer4", Serilog.Events.LogEventLevel.Error)
+                .CreateLogger();
+            serviceCollection.AddLogging(x => x.AddSerilog());
         }
 
         public virtual void AddDbContext(IServiceCollection serviceCollection)
