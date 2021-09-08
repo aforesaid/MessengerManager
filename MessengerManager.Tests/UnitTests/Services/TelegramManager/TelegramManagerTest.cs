@@ -38,9 +38,9 @@ namespace MessengerManager.Tests.UnitTests.Services.TelegramManager
         public async Task SendMessage()
         {
             await Setup();
-            var request = new ApiTelegramMessage("TestMessage#2", _telegramConfiguration.MainChatId);
+            var request = new ApiMessage("TestMessage#2", _telegramConfiguration.MainChatId);
             var messageId = await _telegramBotManager.SendMessage(request);
-            request = new ApiTelegramMessage("ResponseMessage#2", _telegramConfiguration.MainChatId, messageId);
+            request = new ApiMessage("ResponseMessage#2", _telegramConfiguration.MainChatId, messageId);
             await _telegramBotManager.SendMessage(request);
             Console.ReadKey();
         }

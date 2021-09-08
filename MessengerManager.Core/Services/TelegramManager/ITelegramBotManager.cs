@@ -5,9 +5,11 @@ namespace MessengerManager.Core.Services.TelegramManager
 {
     public interface ITelegramBotManager
     {
-        Task<int> SendMessage(ApiTelegramMessage telegramMessage);
-
-        //TODO: создавать в канале тред
-        //TODO: писать в этот тред комментарий - сообщение
+        /// <summary>
+        /// Null - не дефолтное сообщение
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        Task<int?> SendMessage(ApiMessage message);
     }
 }

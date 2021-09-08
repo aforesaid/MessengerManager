@@ -17,4 +17,8 @@
       <Folder Include="Models\Messengers\Vk" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MessengerManager.Infrastructure.Data\MessengerManager.Infrastructure.Data.csproj" />
+    </ItemGroup>
+
 </Project>
