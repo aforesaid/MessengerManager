@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
 using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
 
 namespace MessengerManager
 {
@@ -32,14 +33,13 @@ namespace MessengerManager
             AddLogging(serviceCollection);
             AddDbContext(serviceCollection);
             AddServices(serviceCollection);
-
-
             ServiceProvider = serviceCollection.BuildServiceProvider();
             
             await ConfigureDbContext(serviceCollection);
+            ServiceProvider = serviceCollection.BuildServiceProvider();
+
             
-            
-            ConfigureHandlers();
+            await ConfigureHandlers();
         }
 
         public virtual void AddLogging(IServiceCollection serviceCollection)
@@ -67,11 +67,21 @@ namespace MessengerManager
                 
             var dbContext = ServiceProvider.GetRequiredService<MessengerManagerDbContext>();
             await dbContext.Database.MigrateAsync();
+            
         }
 
-        public virtual void ConfigureHandlers()
+        public async Task ConfigureHandlers()
         {
-            
+            var telegramBotClient = ServiceProvider.GetRequiredService<TelegramBotClient>();
+            var telegramMessageHandler = ServiceProvider.GetRequiredService<TelegramMessageHandler>();
+
+            var tasks = new[]
+            {
+                BaseTelegramHandler.StartHandler(telegramBotClient, UpdateType.Message,
+                    telegramMessageHandler.UpdateHandler, telegramMessageHandler.ErrorHandler)
+            };
+
+            await Task.WhenAll(tasks);
         }
         public virtual void AddServices(IServiceCollection serviceCollection)
         {
