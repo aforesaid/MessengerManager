@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
 
 namespace MessengerManager
 {
@@ -6,7 +7,13 @@ namespace MessengerManager
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var config = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddUserSecrets<Program>()
+                .Build();
+            
+            var host = new MessengerManagerServiceHost(config);
+            
         }
     }
 }
