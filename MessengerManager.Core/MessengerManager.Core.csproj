@@ -11,7 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Models\Messengers\Shared" />
       <Folder Include="Models\Messengers\Telegram" />
       <Folder Include="Models\Messengers\Vk" />
     </ItemGroup>
