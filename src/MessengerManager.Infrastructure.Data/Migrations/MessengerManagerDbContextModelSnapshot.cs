@@ -54,6 +54,49 @@ namespace MessengerManager.Infrastructure.Data.Migrations
 
                     b.ToTable("ChatThreads");
                 });
+
+            modelBuilder.Entity("MessengerManager.Domain.Entities.MessageEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ChatThreadName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Inactive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Owner")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Sent")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatThreadName");
+
+                    b.HasIndex("Date");
+
+                    b.HasIndex("Owner");
+
+                    b.HasIndex("Sent");
+
+                    b.ToTable("Messages");
+                });
 #pragma warning restore 612, 618
         }
     }

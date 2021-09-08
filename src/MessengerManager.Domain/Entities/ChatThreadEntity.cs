@@ -7,7 +7,7 @@ namespace MessengerManager.Domain.Entities
         private const int SupChatIdLength = 128;
         private const int ThreadNameLength = 128;
 
-        public ChatThreadEntity()
+        private ChatThreadEntity()
         { }
         public ChatThreadEntity(string supChatId,
             string threadName, 

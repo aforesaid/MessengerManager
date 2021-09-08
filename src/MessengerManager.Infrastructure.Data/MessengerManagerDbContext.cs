@@ -7,6 +7,7 @@ namespace MessengerManager.Infrastructure.Data
     public class MessengerManagerDbContext : DbContext, IUnitOfWork
     {
         public DbSet<ChatThreadEntity> ChatThreads { get; protected set; }
+        public DbSet<MessageEntity> Messages { get; protected set; }
         public MessengerManagerDbContext() : base()
         { }
 
@@ -31,6 +32,13 @@ namespace MessengerManager.Infrastructure.Data
             modelBuilder.Entity<ChatThreadEntity>().HasIndex(x => x.ThreadName)
                 .IsUnique();
             modelBuilder.Entity<ChatThreadEntity>().HasIndex(x => x.SupChatId);
+            
+            //MessageEntity
+            modelBuilder.Entity<MessageEntity>().HasKey(x => x.Id);
+            modelBuilder.Entity<MessageEntity>().HasIndex(x => x.Owner);
+            modelBuilder.Entity<MessageEntity>().HasIndex(x => x.Sent);
+            modelBuilder.Entity<MessageEntity>().HasIndex(x => x.ChatThreadName);
+            modelBuilder.Entity<MessageEntity>().HasIndex(x => x.Date);
             
             base.OnModelCreating(modelBuilder);
         }
