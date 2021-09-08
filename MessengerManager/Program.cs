@@ -10,6 +10,7 @@ namespace MessengerManager
         {
             var config = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
+                .AddJsonFile("config.json")
                 .AddUserSecrets<Program>()
                 .Build();
 
