@@ -45,7 +45,7 @@ namespace MessengerManager
         public virtual void AddLogging(IServiceCollection serviceCollection)
         {
             Log.Logger = new LoggerConfiguration()
-                .Enrich.WithProperty("APP", "OZON-CONNECTOR")
+                .Enrich.WithProperty("APP", "MessengerManager")
                 .WriteTo.Console()
                 .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
                 .MinimumLevel.Override("IdentityServer4", Serilog.Events.LogEventLevel.Error)
