@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MessengerManager.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -25,10 +27,13 @@ namespace MessengerManager
             AddDbContext(serviceCollection);
             AddServices(serviceCollection);
 
-            ConfigureDbContext(serviceCollection);
+
+            ServiceProvider = serviceCollection.BuildServiceProvider();
+            
+            ConfigureDbContext();
             
             
-            ConfigureHandlers(serviceCollection);
+            ConfigureHandlers();
         }
 
         public virtual void AddLogging(IServiceCollection serviceCollection)
@@ -44,7 +49,10 @@ namespace MessengerManager
 
         public virtual void AddDbContext(IServiceCollection serviceCollection)
         {
-            
+            serviceCollection.AddDbContext<MessengerManagerDbContext>(opt =>
+            {
+                opt.UseNpgsql(_configuration["POSTGRESQL"]);
+            });
         }
 
         public virtual void AddServices(IServiceCollection serviceCollection)
@@ -52,12 +60,12 @@ namespace MessengerManager
             
         }
 
-        public virtual void ConfigureDbContext(IServiceCollection serviceCollection)
+        public virtual void ConfigureDbContext()
         {
             
         }
 
-        public virtual void ConfigureHandlers(IServiceCollection serviceCollection)
+        public virtual void ConfigureHandlers()
         {
             
         }
