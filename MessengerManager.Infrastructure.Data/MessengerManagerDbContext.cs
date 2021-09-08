@@ -16,9 +16,10 @@ namespace MessengerManager.Infrastructure.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured)
             {
-                
+                optionsBuilder.UseNpgsql(
+                    "User ID=postgres;Password=root;Server=localhost;Port=5432;Database=messengerManager;");
             }
             base.OnConfiguring(optionsBuilder);
         }
