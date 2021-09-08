@@ -1,8 +1,7 @@
 ﻿namespace MessengerManager.Core.Configurations.Telegram
 {
     public class TelegramConfiguration
-    {
-        public const string ConfigName = "Telegram";
+    { 
         public TelegramConfiguration()
         { }
         public TelegramConfiguration(string token, string mainChatId, string supportChatId)

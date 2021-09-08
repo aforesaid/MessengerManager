@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MessengerManager.Core.Configurations.Telegram;
 using MessengerManager.Core.Handlers.TelegramHandlers;
+using MessengerManager.Core.Services.TelegramManager;
 using MessengerManager.Domain.Entities;
 using MessengerManager.Domain.Interfaces;
 using MessengerManager.Infrastructure.Data;
@@ -18,14 +20,14 @@ namespace MessengerManager
     {
         private readonly IConfiguration _configuration;
 
-        private IServiceProvider ServiceProvider { get; set; }
+        public IServiceProvider ServiceProvider { get; set; }
 
         public MessengerManagerServiceHost(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public async Task Start()
+        public virtual async Task Start(CancellationToken token)
         {
             var serviceCollection = new ServiceCollection();
 
@@ -38,7 +40,7 @@ namespace MessengerManager
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
             
-            await ConfigureHandlers();
+            ConfigureHandlers(token);
         }
 
         public virtual void AddLogging(IServiceCollection serviceCollection)
@@ -73,18 +75,14 @@ namespace MessengerManager
             await dbContext.Database.MigrateAsync();
         }
 
-        public async Task ConfigureHandlers()
+        public virtual void ConfigureHandlers(CancellationToken token)
         {
             var telegramBotClient = ServiceProvider.GetRequiredService<ITelegramBotClient>();
             var telegramMessageHandler = ServiceProvider.GetRequiredService<TelegramMessageHandler>();
 
-            var tasks = new[]
-            {
-                BaseTelegramHandler.StartHandler(telegramBotClient, UpdateType.Message,
-                    telegramMessageHandler.UpdateHandler, telegramMessageHandler.ErrorHandler)
-            };
-
-            await Task.WhenAll(tasks);
+            BaseTelegramHandler.StartHandler(telegramBotClient, UpdateType.Message,
+                telegramMessageHandler.UpdateHandler, telegramMessageHandler.ErrorHandler, token)
+                .ConfigureAwait(false);
         }
         public virtual void AddServices(IServiceCollection serviceCollection)
         {
@@ -95,14 +93,20 @@ namespace MessengerManager
 
         private void AddTelegramHandlers(IServiceCollection serviceCollection)
         {
-            var telegramConfiguration = _configuration.GetSection(TelegramConfiguration.ConfigName)
+            var telegramConfiguration = _configuration.GetSection(nameof(TelegramConfiguration))
                 .Get<TelegramConfiguration>();
 
-            serviceCollection.AddOptions<TelegramConfiguration>(TelegramConfiguration.ConfigName);
+            serviceCollection.Configure<TelegramConfiguration>(opt =>
+            {
+                opt.Token = telegramConfiguration.Token;
+                opt.MainChatId = telegramConfiguration.MainChatId;
+                opt.SupportChatId = telegramConfiguration.SupportChatId;
+            });
 
             var telegramClient = new TelegramBotClient(telegramConfiguration.Token);
 
             serviceCollection.AddSingleton<ITelegramBotClient>(telegramClient);
+            serviceCollection.AddScoped<ITelegramBotManager, TelegramBotManager>();
 
             serviceCollection.AddSingleton<TelegramMessageHandler>();
         }

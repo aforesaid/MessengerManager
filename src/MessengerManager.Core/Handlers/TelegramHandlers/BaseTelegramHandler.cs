@@ -13,7 +13,8 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
         public static async Task StartHandler(ITelegramBotClient telegramBotClient,
             UpdateType updateType,
             Action<ITelegramBotClient, Update, CancellationToken> updateAction,
-            Action<ITelegramBotClient, Exception, CancellationToken> errorAction)
+            Action<ITelegramBotClient, Exception, CancellationToken> errorAction,
+            CancellationToken token)
         {
             var receiverOptions = new ReceiverOptions
             {
@@ -21,7 +22,7 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
                 ThrowPendingUpdates = true
             };
 
-            await telegramBotClient.ReceiveAsync(updateAction,errorAction, receiverOptions);
+            await telegramBotClient.ReceiveAsync(updateAction,errorAction, receiverOptions, token);
         }
     }
 }

@@ -6,10 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="IntegrationTests" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\MessengerManager.Core\MessengerManager.Core.csproj" />
       <ProjectReference Include="..\MessengerManager\MessengerManager.csproj" />
     </ItemGroup>
@@ -20,6 +16,7 @@
       <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
       <PackageReference Include="Moq" Version="4.16.1" />
+      <PackageReference Include="NUnit" Version="3.13.2" />
       <PackageReference Include="xunit" Version="2.4.1" />
     </ItemGroup>
 

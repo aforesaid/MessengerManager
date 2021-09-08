@@ -47,10 +47,10 @@ namespace MessengerManager.Tests.UnitTests.Services.TelegramManager
         private async Task Setup()
         {
             //TODO: допилить mock
-            var handler = new TelegramMessageHandler(null, null, null);
-            Task.Run(async () => await BaseTelegramHandler.StartHandler(_telegramBotClient, UpdateType.Message,
-                handler.UpdateHandler,
-                handler.ErrorHandler));
+            // var handler = new TelegramMessageHandler(null, null, null);
+            // Task.Run(async () => await BaseTelegramHandler.StartHandler(_telegramBotClient, UpdateType.Message,
+            //     handler.UpdateHandler,
+            //     handler.ErrorHandler));
         }
     }
 }

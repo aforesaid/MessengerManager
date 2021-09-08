@@ -49,7 +49,7 @@ namespace MessengerManager.Core.Services.TelegramManager
                     }
                 }
               
-                var responseMessage = await _telegramBotClient.SendTextMessageAsync(_telegramConfiguration.SupportChatId, 
+                var responseMessage = await _telegramBotClient.SendTextMessageAsync(existThreadDetail.SupChatId, 
                     message.Text, replyToMessageId: existThreadDetail.MessageId);
                 return responseMessage.MessageId;
             }
