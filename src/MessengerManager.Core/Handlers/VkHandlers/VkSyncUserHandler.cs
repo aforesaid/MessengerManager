@@ -16,7 +16,7 @@ namespace MessengerManager.Core.Handlers.VkHandlers
     public class VkSyncUserHandler
     {
         private readonly ILogger<VkSyncUserHandler> _logger;
-        private readonly EfGenericRepository<UserEntity> _usersRepository;
+        private readonly IGenericRepository<UserEntity> _usersRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly IVkBotManager _vkBotManager;
