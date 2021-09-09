@@ -62,5 +62,17 @@ namespace MessengerManager.Tests.UnitTests.Services.VkManager
             Assert.NotNull(messages.First().MessageId);
             Assert.NotNull(messages.First().UserId);
         }
+
+        [Fact]
+        public async Task GetUsers()
+        {
+            var users = await _vkBotManager.GetAllUsers();
+            
+            Assert.NotEmpty(users);
+            
+            Assert.NotNull(users.First().Name);
+            Assert.NotNull(users.First().LastName);
+            Assert.NotNull(users.First().UniqueId);
+        }
     }
 }
