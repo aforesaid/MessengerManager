@@ -8,6 +8,7 @@ namespace MessengerManager.Infrastructure.Data
     {
         public DbSet<ChatThreadEntity> ChatThreads { get; protected set; }
         public DbSet<MessageEntity> Messages { get; protected set; }
+        public DbSet<UserEntity> Users { get; protected set; }
         public MessengerManagerDbContext() : base()
         { }
 
@@ -31,7 +32,7 @@ namespace MessengerManager.Infrastructure.Data
             modelBuilder.Entity<ChatThreadEntity>().HasKey(x => x.Id);
             modelBuilder.Entity<ChatThreadEntity>().HasIndex(x => x.ThreadName)
                 .IsUnique();
-            modelBuilder.Entity<ChatThreadEntity>().HasIndex(x => x.SupChatId);
+            modelBuilder.Entity<ChatThreadEntity>().HasIndex(x => x.TelegramSupChatId);
             
             //MessageEntity
             modelBuilder.Entity<MessageEntity>().HasKey(x => x.Id);
@@ -39,6 +40,13 @@ namespace MessengerManager.Infrastructure.Data
             modelBuilder.Entity<MessageEntity>().HasIndex(x => x.Sent);
             modelBuilder.Entity<MessageEntity>().HasIndex(x => x.ChatThreadName);
             modelBuilder.Entity<MessageEntity>().HasIndex(x => x.Date);
+            
+            //UserEntity
+            modelBuilder.Entity<UserEntity>().HasKey(x => x.Id);
+            modelBuilder.Entity<UserEntity>().HasIndex(x => x.Name);
+            modelBuilder.Entity<UserEntity>().HasIndex(x => x.UserId);
+            modelBuilder.Entity<UserEntity>().HasIndex(x => new {x.Name, x.LastName, x.UniqueId})
+                .IsUnique();
             
             base.OnModelCreating(modelBuilder);
         }

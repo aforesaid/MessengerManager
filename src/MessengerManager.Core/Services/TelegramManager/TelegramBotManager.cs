@@ -54,7 +54,7 @@ namespace MessengerManager.Core.Services.TelegramManager
                     }
                 }
               
-                var responseMessage = await _telegramBotClient.SendTextMessageAsync(existThreadDetail.SupChatId, 
+                var responseMessage = await _telegramBotClient.SendTextMessageAsync(existThreadDetail.TelegramSupChatId, 
                     message.Text, replyToMessageId: existThreadDetail.MessageId);
                 return null;
             }

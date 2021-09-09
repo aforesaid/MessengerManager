@@ -9,18 +9,25 @@ namespace MessengerManager.Domain.Entities
 
         private ChatThreadEntity()
         { }
-        public ChatThreadEntity(string supChatId,
+        public ChatThreadEntity(string telegramSupChatId,
             string threadName, 
             int messageId)
         {
-            SupChatId = supChatId;
+            TelegramSupChatId = telegramSupChatId;
             ThreadName = threadName;
             MessageId = messageId;
         }
         [StringLength(SupChatIdLength)]
-        public string SupChatId { get; set; }
+        public string TelegramSupChatId { get; private set; }
         [StringLength(ThreadNameLength)]
-        public string ThreadName { get; set; }
-        public int MessageId { get; set; }
+        public string ThreadName { get; private set; }
+        public long VkPeerId { get; private set; }
+        public int MessageId { get; private set; }
+
+        public void UpdateVkPeerId(long vkPeerId)
+        {
+            VkPeerId = vkPeerId;
+            SetUpdated();
+        }
     }
 }

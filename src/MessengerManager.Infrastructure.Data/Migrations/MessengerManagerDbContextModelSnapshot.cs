@@ -34,7 +34,7 @@ namespace MessengerManager.Infrastructure.Data.Migrations
                     b.Property<int>("MessageId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("SupChatId")
+                    b.Property<string>("TelegramSupChatId")
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
@@ -45,9 +45,12 @@ namespace MessengerManager.Infrastructure.Data.Migrations
                     b.Property<DateTime>("Updated")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<long>("VkPeerId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("SupChatId");
+                    b.HasIndex("TelegramSupChatId");
 
                     b.HasIndex("ThreadName")
                         .IsUnique();
@@ -96,6 +99,45 @@ namespace MessengerManager.Infrastructure.Data.Migrations
                     b.HasIndex("Sent");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("MessengerManager.Domain.Entities.UserEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Inactive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UniqueId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("Name", "LastName", "UniqueId")
+                        .IsUnique();
+
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

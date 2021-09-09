@@ -23,7 +23,7 @@
 
         public override string ToString()
         {
-            return $"{Name} {LastName} @{UniqueId}";
+            return $"{Name} {LastName}|@{UniqueId}";
         }
     }
 }
