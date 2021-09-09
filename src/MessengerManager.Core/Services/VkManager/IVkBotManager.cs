@@ -12,6 +12,15 @@ namespace MessengerManager.Core.Services.VkManager
         /// <returns></returns>
         Task<ApiVkChat[]> GetAllChats();
 
+        /// <summary>
+        /// Получение сообщений из чата
+        /// </summary>
+        /// <param name="vkPeerId"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        Task<ApiVkMessage[]> GetMessages(long vkPeerId, int count = 200);
+
+
         //TODO: читать все чаты, фильтровать только нужные
         //TODO: все сообщения по фильтрованным чатам переносить в Telegram
     }

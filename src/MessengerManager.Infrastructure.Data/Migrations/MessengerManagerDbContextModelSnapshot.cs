@@ -88,6 +88,9 @@ namespace MessengerManager.Infrastructure.Data.Migrations
                     b.Property<DateTime>("Updated")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<long>("VkPeerId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChatThreadName");
@@ -97,6 +100,8 @@ namespace MessengerManager.Infrastructure.Data.Migrations
                     b.HasIndex("Owner");
 
                     b.HasIndex("Sent");
+
+                    b.HasIndex("VkPeerId");
 
                     b.ToTable("Messages");
                 });

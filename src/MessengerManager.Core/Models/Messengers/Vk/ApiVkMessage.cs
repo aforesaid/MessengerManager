@@ -1,24 +1,29 @@
-﻿namespace MessengerManager.Core.Models.Messengers.Vk
+﻿using System;
+using VkNet.Model;
+
+namespace MessengerManager.Core.Models.Messengers.Vk
 {
     public class ApiVkMessage
     {
-        public ApiVkMessage(long messageId)
-        {
-            MessageId = messageId;
-        }
+        public ApiVkMessage()
+        { }
 
-        public ApiVkMessage(string chatThreadName,
+        public ApiVkMessage(long vkPeerId,
             string title,
-            ApiVkUser owner, long messageId)
+            long? userId, 
+            long? messageId,
+            DateTime? date)
         {
-            ChatThreadName = chatThreadName;
+            VkPeerId = vkPeerId;
             Title = title;
-            Owner = owner;
+            UserId = userId;
             MessageId = messageId;
+            Date = date;
         }
-        public string ChatThreadName { get; set; }
+        public long VkPeerId { get; set; }
         public string Title { get; set; }
-        public long MessageId { get; set; }
-        public ApiVkUser Owner { get; set; }
+        public long? MessageId { get; set; }
+        public DateTime? Date { get; set; }
+        public long? UserId { get; set; }
     }
 }

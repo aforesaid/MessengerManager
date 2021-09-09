@@ -33,10 +33,15 @@ namespace MessengerManager.Core.Services.VkManager
             {
                 var listConversations = new List<ApiVkChat>();
                 const int limit = 200;
+                ulong offset = 0;
                 GetConversationsResult result;
                 do
                 {
-                    result = await _vkApi.Messages.GetConversationsAsync(new GetConversationsParams());
+                    result = await _vkApi.Messages.GetConversationsAsync(new GetConversationsParams
+                    {
+                        Count = limit,
+                        Offset = offset
+                    });
 
                     foreach (var conversationAndLastMessage in result.Items)
                     {
@@ -61,6 +66,8 @@ namespace MessengerManager.Core.Services.VkManager
                             }
                         }
                     }
+
+                    offset += limit;
                 } while (result.Items.Count == limit);
 
                 return listConversations.ToArray();
@@ -68,6 +75,40 @@ namespace MessengerManager.Core.Services.VkManager
             catch (Exception e)
             {
                 _logger.LogError(e, "Не удалось получить список чатов");
+                throw;
+            }
+        }
+
+        public async Task<ApiVkMessage[]> GetMessages(long vkPeerId, int count = 200)
+        {
+            try
+            {
+                var listMessages = new List<ApiVkMessage>();
+                const int limit = 200;
+                var offset = 0;
+                MessageGetHistoryObject result;
+                do
+                {
+                    result = await _vkApi.Messages.GetHistoryAsync(new MessagesGetHistoryParams
+                    {
+                        PeerId = vkPeerId,
+                        Count = limit,
+                        Offset = offset,
+                    });
+
+                    var newMessages = result.Messages.Select(x =>
+                            new ApiVkMessage(vkPeerId, x.Title, x.FromId, x.Id, x.Date))
+                        .ToArray();
+                    listMessages.AddRange(newMessages);
+
+                    offset += limit;
+                } while (result.Messages.Count() == limit);
+
+                return listMessages.ToArray();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Не удалось получить список сообщений по vkPeerId : {0} ", vkPeerId);
                 throw;
             }
         }
