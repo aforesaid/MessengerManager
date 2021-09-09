@@ -6,10 +6,10 @@ namespace MessengerManager.Core.Services.TelegramManager
     public interface ITelegramBotManager
     {
         /// <summary>
-        /// Null - не дефолтное сообщение
+        /// Отправка сообщения в тг
         /// </summary>
         /// <param name="message"></param>
-        /// <returns></returns>
+        /// <returns>Null - не было отправлено в тред, вероятно был создан новый тред</returns>
         Task<int?> SendMessage(ApiMessage message);
     }
 }

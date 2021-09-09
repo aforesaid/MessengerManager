@@ -4,5 +4,10 @@
         "Token": "",
         "MainChatId": "",
         "SupportChatId": ""
+    },
+    "VkConfiguration": {
+        "ApplicationId": 123456,
+        "Login": "login@login.ru",
+        "Password": "password"
     }
 }

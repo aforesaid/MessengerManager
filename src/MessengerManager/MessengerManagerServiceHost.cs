@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MessengerManager.Core.Configurations.Telegram;
+using MessengerManager.Core.Configurations.Vk;
 using MessengerManager.Core.Handlers.TelegramHandlers;
 using MessengerManager.Core.Services.TelegramManager;
 using MessengerManager.Domain.Entities;
@@ -13,6 +14,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
+using VkNet;
+using VkNet.Abstractions;
+using VkNet.Enums.Filters;
+using VkNet.Model;
 
 namespace MessengerManager
 {
@@ -66,7 +71,6 @@ namespace MessengerManager
         {
             serviceCollection.AddScoped<IGenericRepository<ChatThreadEntity>, EfGenericRepository<ChatThreadEntity>>();
             serviceCollection.AddScoped<IGenericRepository<MessageEntity>, EfGenericRepository<MessageEntity>>();
-
         }
         
         public virtual async Task ConfigureDbContext(IServiceCollection serviceCollection)
@@ -91,6 +95,23 @@ namespace MessengerManager
             AddRepositories(serviceCollection);
             
             AddTelegramHandlers(serviceCollection);
+        }
+
+        private async Task AddVkHandlers(IServiceCollection serviceCollection)
+        {
+            var vkConfiguration = _configuration.GetSection(nameof(VkConfiguration))
+                .Get<VkConfiguration>();
+
+            var vkClient = new VkApi();
+            await vkClient.AuthorizeAsync(new ApiAuthParams
+            {
+                ApplicationId = vkConfiguration.ApplicationId,
+                Login = vkConfiguration.Login,
+                Password = vkConfiguration.Password,
+                Settings = Settings.All
+            });
+
+            serviceCollection.AddSingleton<IVkApi>(vkClient);
         }
 
         private void AddTelegramHandlers(IServiceCollection serviceCollection)

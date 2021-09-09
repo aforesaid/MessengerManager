@@ -47,11 +47,16 @@ namespace MessengerManager.Core.Services.TelegramManager
                         
                         return response.MessageId;
                     }
+                    else
+                    {
+                        _logger.LogWarning("Не могу создать чат с названием {0}", message.ChatName);
+                        return null;
+                    }
                 }
               
                 var responseMessage = await _telegramBotClient.SendTextMessageAsync(existThreadDetail.SupChatId, 
                     message.Text, replyToMessageId: existThreadDetail.MessageId);
-                return responseMessage.MessageId;
+                return null;
             }
             catch (Exception e)
             {
