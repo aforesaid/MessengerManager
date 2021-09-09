@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 using MessengerManager.Core.Models.Messengers.Shared;
 using MessengerManager.Core.Services.TelegramManager;
 using MessengerManager.Domain.Entities;
@@ -19,6 +20,9 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
         private readonly IGenericRepository<UserEntity> _usersRepo;
         private readonly ITelegramBotManager _telegramBotManager;
         private readonly IUnitOfWork _unitOfWork;
+        
+        private Timer _timer;
+        private const int TimerTime = 60 * 1000 * 10;
 
         public TelegramSyncMessagesHandler(ILogger<TelegramSyncMessagesHandler> logger,
             IGenericRepository<ChatThreadEntity> chatsRepo, 
@@ -33,6 +37,14 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
             _usersRepo = usersRepo;
             _telegramBotManager = telegramBotManager;
             _unitOfWork = unitOfWork;
+        }
+        public void SetTimer()
+        {
+            _timer = new Timer(TimerTime);
+            _timer.Elapsed += (_, _) => SyncMessagesWithTelegram().Wait();
+
+            _timer.AutoReset = true;
+            _timer.Enabled = true;
         }
 
         public async Task SyncMessagesWithTelegram()

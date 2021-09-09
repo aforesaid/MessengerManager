@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 using MessengerManager.Core.Models.Messengers.Vk;
 using MessengerManager.Core.Services.VkManager;
 using MessengerManager.Domain.Entities;
@@ -20,6 +21,8 @@ namespace MessengerManager.Core.Handlers.VkHandlers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IVkBotManager _vkBotManager;
 
+        private Timer _timer;
+        private const int TimerTime = 60 * 1000 * 10;
         public VkSyncMessagesHandler(ILogger<VkSyncMessagesHandler> logger, 
             IGenericRepository<MessageEntity> messagesRepo,
             IUnitOfWork unitOfWork,
@@ -31,7 +34,14 @@ namespace MessengerManager.Core.Handlers.VkHandlers
             _vkBotManager = vkBotManager;
             _chatsRepo = chatsRepo;
         }
+        public void SetTimer()
+        {
+            _timer = new Timer(TimerTime);
+            _timer.Elapsed += (_, _) => SyncMessages().Wait();
 
+            _timer.AutoReset = true;
+            _timer.Enabled = true;
+        }
         public async Task SyncMessages()
         {
             try

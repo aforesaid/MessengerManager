@@ -48,6 +48,7 @@ namespace MessengerManager
 
             
             ConfigureHandlers(token);
+            ConfigureSyncHandlers();
         }
 
         public virtual void AddLogging(IServiceCollection serviceCollection)
@@ -93,6 +94,19 @@ namespace MessengerManager
                 telegramMessageHandler.UpdateHandler, telegramMessageHandler.ErrorHandler, token)
                 .ConfigureAwait(false);
         }
+
+        public virtual void ConfigureSyncHandlers()
+        {
+            var telegramSyncMessagesHandler = ServiceProvider.GetRequiredService<TelegramSyncMessagesHandler>();
+            telegramSyncMessagesHandler.SetTimer();
+            
+            var vkSyncChatThreadHandler = ServiceProvider.GetRequiredService<VkSyncChatThreadsHandler>();
+            vkSyncChatThreadHandler.SetTimer();
+            var vkSyncMessagesHandler = ServiceProvider.GetRequiredService<VkSyncMessagesHandler>();
+            vkSyncMessagesHandler.SetTimer();
+            var vkSyncUsersHandler = ServiceProvider.GetRequiredService<VkSyncUserHandler>();
+            vkSyncUsersHandler.SetTimer();
+        }
         public virtual async Task AddServices(IServiceCollection serviceCollection)
         {
             AddRepositories(serviceCollection);
@@ -123,9 +137,9 @@ namespace MessengerManager
             
             serviceCollection.AddSingleton<IVkApi>(vkClient);
             
-            serviceCollection.AddScoped<VkSyncChatThreadsHandler>();
-            serviceCollection.AddScoped<VkSyncMessagesHandler>();
-            serviceCollection.AddScoped<VkSyncUserHandler>();
+            serviceCollection.AddSingleton<VkSyncChatThreadsHandler>();
+            serviceCollection.AddSingleton<VkSyncMessagesHandler>();
+            serviceCollection.AddSingleton<VkSyncUserHandler>();
         }
 
         private void AddTelegramHandlers(IServiceCollection serviceCollection)
@@ -147,7 +161,7 @@ namespace MessengerManager
 
             serviceCollection.AddSingleton<TelegramMessageHandler>();
             
-            serviceCollection.AddScoped<TelegramSyncMessagesHandler>();
+            serviceCollection.AddSingleton<TelegramSyncMessagesHandler>();
         }
     }
 }

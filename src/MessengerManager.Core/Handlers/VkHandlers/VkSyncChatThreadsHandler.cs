@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 using MessengerManager.Core.Models.Messengers.Shared;
 using MessengerManager.Core.Models.Messengers.Vk;
 using MessengerManager.Core.Services.TelegramManager;
@@ -21,6 +22,9 @@ namespace MessengerManager.Core.Handlers.VkHandlers
         private readonly ITelegramBotManager _telegramBotManager;
         private readonly IVkBotManager _vkBotManager;
 
+        private Timer _timer;
+        private const int TimerTime = 60 * 1000 * 10;
+
         public VkSyncChatThreadsHandler(ILogger<VkSyncChatThreadsHandler> logger,
             IGenericRepository<ChatThreadEntity> chatRepo,
             ITelegramBotManager telegramBotManager,
@@ -30,6 +34,15 @@ namespace MessengerManager.Core.Handlers.VkHandlers
             _chatRepo = chatRepo;
             _telegramBotManager = telegramBotManager;
             _vkBotManager = vkBotManager;
+        }
+
+        public void SetTimer()
+        {
+            _timer = new Timer(TimerTime);
+            _timer.Elapsed += (_, _) => SyncChats().Wait();
+
+            _timer.AutoReset = true;
+            _timer.Enabled = true;
         }
 
         public async Task SyncChats()
