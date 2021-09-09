@@ -2,12 +2,12 @@
 
 namespace MessengerManager.Core.Models.Messengers.Shared
 {
-    public class ApiMessage
+    public class ApiTelegramMessage
     {
-        public ApiMessage()
+        public ApiTelegramMessage()
         {}
 
-        public ApiMessage(string from, 
+        public ApiTelegramMessage(string from, 
             string text, 
             string chatName,
             DateTime date)

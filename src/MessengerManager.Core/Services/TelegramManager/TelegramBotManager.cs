@@ -29,12 +29,12 @@ namespace MessengerManager.Core.Services.TelegramManager
             _telegramConfiguration = telegramConfiguration.Value;
         }
 
-        public async Task<int?> SendMessage(ApiMessage message)
+        public async Task<int?> SendMessage(ApiTelegramMessage telegramMessage)
         {
             try
             {
                 var existThreadDetail = await _chatThreadRepository.GetAll()
-                    .FirstOrDefaultAsync(x => x.ThreadName == message.ChatName);
+                    .FirstOrDefaultAsync(x => x.ThreadName == telegramMessage.ChatName);
                 
                 if (existThreadDetail == null)
                 {
@@ -43,25 +43,25 @@ namespace MessengerManager.Core.Services.TelegramManager
                     if (canMakeThisThread)
                     {
                         var response = await _telegramBotClient.SendTextMessageAsync(_telegramConfiguration.MainChatId, 
-                            message.ChatName);
+                            telegramMessage.ChatName);
                         
                         return response.MessageId;
                     }
                     else
                     {
-                        _logger.LogWarning("Не могу создать чат с названием {0}", message.ChatName);
+                        _logger.LogWarning("Не могу создать чат с названием {0}", telegramMessage.ChatName);
                         return null;
                     }
                 }
               
                 var responseMessage = await _telegramBotClient.SendTextMessageAsync(existThreadDetail.TelegramSupChatId, 
-                    message.Text, replyToMessageId: existThreadDetail.MessageId);
+                    telegramMessage.Text, replyToMessageId: existThreadDetail.MessageId);
                 return null;
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Не удалось отправить сообщение в канал, message: {0}",
-                    message);
+                    telegramMessage);
                 throw;
             }
         }

@@ -39,7 +39,7 @@ namespace MessengerManager.Tests.IntegrationTests
 
             var existChat = chatThreadRepo.GetAll().FirstOrDefault(x => x.ThreadName == "test");
 
-            var request = new ApiMessage("Yuri", "TestText", existChat?.ThreadName, DateTime.Now);
+            var request = new ApiTelegramMessage("Yuri", "TestText", existChat?.ThreadName, DateTime.Now);
             await manager.SendMessage(request);
         }
         [Test]
@@ -49,7 +49,7 @@ namespace MessengerManager.Tests.IntegrationTests
 
             var manager = _testHost.ServiceProvider.GetRequiredService<ITelegramBotManager>();
 
-            var request = new ApiMessage("Yuri", "TestText", Guid.NewGuid().ToString(), DateTime.Now);
+            var request = new ApiTelegramMessage("Yuri", "TestText", Guid.NewGuid().ToString(), DateTime.Now);
             await manager.SendMessage(request);
             
             await Task.Delay(10000);

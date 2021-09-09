@@ -40,7 +40,7 @@ namespace MessengerManager.Tests.UnitTests.Services.TelegramManager
         public async Task SendMessage()
         {
             await Setup();
-            var request = new ApiMessage("text", "text", "text", DateTime.Now);
+            var request = new ApiTelegramMessage("text", "text", "text", DateTime.Now);
             var messageId = await _telegramBotManager.SendMessage(request);
             Console.ReadKey();
         }

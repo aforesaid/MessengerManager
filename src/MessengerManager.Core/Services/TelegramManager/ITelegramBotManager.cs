@@ -8,8 +8,8 @@ namespace MessengerManager.Core.Services.TelegramManager
         /// <summary>
         /// Отправка сообщения в тг
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="telegramMessage"></param>
         /// <returns>Null - не было отправлено в тред, вероятно был создан новый тред</returns>
-        Task<int?> SendMessage(ApiMessage message);
+        Task<int?> SendMessage(ApiTelegramMessage telegramMessage);
     }
 }
