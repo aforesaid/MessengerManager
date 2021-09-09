@@ -13,7 +13,7 @@ namespace MessengerManager.Core.Handlers.VkHandlers
     /// <summary>
     /// Синхронизация пользователей с БД
     /// </summary>
-    public class VkSyncUserHandler
+    public class VkSyncUserHandler : IDisposable
     {
         private readonly ILogger<VkSyncUserHandler> _logger;
         private readonly IGenericRepository<UserEntity> _usersRepository;
@@ -24,7 +24,7 @@ namespace MessengerManager.Core.Handlers.VkHandlers
         private Timer _timer;
         private const int TimerTime = 60 * 1000 * 10;
         public VkSyncUserHandler(ILogger<VkSyncUserHandler> logger, 
-            EfGenericRepository<UserEntity> usersRepository, 
+            IGenericRepository<UserEntity> usersRepository, 
             IUnitOfWork unitOfWork, 
             IVkBotManager vkBotManager)
         {
@@ -77,6 +77,11 @@ namespace MessengerManager.Core.Handlers.VkHandlers
             {
                 _logger.LogError(e, "Не удалось синхронизировать пользователей");
             }
+        }
+
+        public void Dispose()
+        {
+            _timer?.Dispose();
         }
     }
 }

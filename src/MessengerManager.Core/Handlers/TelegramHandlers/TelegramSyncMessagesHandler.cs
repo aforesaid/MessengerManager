@@ -13,7 +13,7 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
     /// <summary>
     /// Синхронизация сообщений из БД с Тг
     /// </summary>
-    public class TelegramSyncMessagesHandler
+    public class TelegramSyncMessagesHandler : IDisposable
     {
         private readonly ILogger<TelegramSyncMessagesHandler> _logger;
         private readonly IGenericRepository<ChatThreadEntity> _chatsRepo;
@@ -88,6 +88,11 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
                 _logger.LogError(e, "Не удалось отправить все необходимые сообщения в Tg");
                 throw;
             }
+        }
+
+        public void Dispose()
+        {
+            _timer?.Dispose();
         }
     }
 }

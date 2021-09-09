@@ -15,7 +15,7 @@ namespace MessengerManager.Core.Handlers.VkHandlers
     /// <summary>
     /// Синхронизация чатов с Tg
     /// </summary>
-    public class VkSyncChatThreadsHandler
+    public class VkSyncChatThreadsHandler : IDisposable
     {
         private readonly ILogger<VkSyncChatThreadsHandler> _logger;
         private readonly IGenericRepository<ChatThreadEntity> _chatRepo;
@@ -75,6 +75,11 @@ namespace MessengerManager.Core.Handlers.VkHandlers
         {
             var request = new ApiTelegramMessage(null, null, chat.ChatThreadName, DateTime.Now);
             await _telegramBotManager.SendMessage(request);
+        }
+
+        public void Dispose()
+        {
+            _timer?.Dispose();
         }
     }
 }

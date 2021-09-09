@@ -13,7 +13,7 @@ namespace MessengerManager.Core.Handlers.VkHandlers
     /// <summary>
     /// Синхронизация сообщений вк с БД
     /// </summary>
-    public class VkSyncMessagesHandler
+    public class VkSyncMessagesHandler : IDisposable
     {
         private readonly ILogger<VkSyncMessagesHandler> _logger;
         private readonly IGenericRepository<ChatThreadEntity> _chatsRepo;
@@ -83,6 +83,11 @@ namespace MessengerManager.Core.Handlers.VkHandlers
             return message.Date.HasValue &&
                    message.MessageId.HasValue &&
                    message.UserId.HasValue;
+        }
+
+        public void Dispose()
+        {
+            _timer?.Dispose();
         }
     }
 }
