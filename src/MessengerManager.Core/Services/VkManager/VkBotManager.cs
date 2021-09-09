@@ -83,6 +83,8 @@ namespace MessengerManager.Core.Services.VkManager
         {
             try
             {
+                const string messageAlias = "message";
+                
                 var listMessages = new List<ApiVkMessage>();
                 const int limit = 200;
                 var offset = 0;
@@ -96,13 +98,15 @@ namespace MessengerManager.Core.Services.VkManager
                         Offset = offset,
                     });
 
-                    var newMessages = result.Messages.Select(x =>
-                            new ApiVkMessage(vkPeerId, x.Title, x.FromId, x.Id, x.Date))
+                    var newMessages = result.Messages
+                        .Where(x => x.Text != null && x.FromId.HasValue)
+                        .Select(x =>
+                            new ApiVkMessage(vkPeerId, x.Text, x.FromId, x.Id, x.Date))
                         .ToArray();
                     listMessages.AddRange(newMessages);
 
                     offset += limit;
-                } while (result.Messages.Count() == limit);
+                } while (result.Messages.Count() == limit && listMessages.Count < count);
 
                 return listMessages.ToArray();
             }

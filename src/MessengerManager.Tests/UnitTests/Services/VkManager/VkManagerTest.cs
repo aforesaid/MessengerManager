@@ -46,5 +46,21 @@ namespace MessengerManager.Tests.UnitTests.Services.VkManager
             Assert.NotEmpty(chats);
             Assert.NotNull(chats.First().ChatThreadName);
         }
+
+        [Fact]
+        public async Task GetMessages()
+        {
+            var chats = await _vkBotManager.GetAllChats();
+
+            var vkPeerId = chats.First().VkPeerId;
+            var messages = await _vkBotManager.GetMessages(vkPeerId);
+            
+            Assert.NotEmpty(messages);
+            
+            Assert.NotNull(messages.First().Date);
+            Assert.NotNull(messages.First().Title);
+            Assert.NotNull(messages.First().MessageId);
+            Assert.NotNull(messages.First().UserId);
+        }
     }
 }
