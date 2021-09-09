@@ -5,16 +5,15 @@
         public VkConfiguration()
         { }
         
-        public VkConfiguration(ulong applicationId, 
-            string login,
-            string password)
+        public VkConfiguration(string login,
+            string password, string myVkUsername)
         {
-            ApplicationId = applicationId;
             Login = login;
             Password = password;
+            MyVkUsername = myVkUsername;
         }
-        public ulong ApplicationId { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public string MyVkUsername { get; set; }
     }
 }

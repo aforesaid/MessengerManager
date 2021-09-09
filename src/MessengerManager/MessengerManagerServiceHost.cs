@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MessengerManager.Core.Configurations.Telegram;
@@ -16,8 +17,11 @@ using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 using VkNet;
 using VkNet.Abstractions;
+using VkNet.AudioBypassService.Extensions;
 using VkNet.Enums.Filters;
+using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
+using VkNet.Model.RequestParams;
 
 namespace MessengerManager
 {
@@ -38,7 +42,8 @@ namespace MessengerManager
 
             AddLogging(serviceCollection);
             AddDbContext(serviceCollection);
-            AddServices(serviceCollection);
+            
+            await AddServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
             
             await ConfigureDbContext(serviceCollection);
@@ -90,10 +95,10 @@ namespace MessengerManager
                 telegramMessageHandler.UpdateHandler, telegramMessageHandler.ErrorHandler, token)
                 .ConfigureAwait(false);
         }
-        public virtual void AddServices(IServiceCollection serviceCollection)
+        public virtual async Task AddServices(IServiceCollection serviceCollection)
         {
             AddRepositories(serviceCollection);
-            
+            await AddVkHandlers(serviceCollection);
             AddTelegramHandlers(serviceCollection);
         }
 
@@ -101,16 +106,16 @@ namespace MessengerManager
         {
             var vkConfiguration = _configuration.GetSection(nameof(VkConfiguration))
                 .Get<VkConfiguration>();
-
-            var vkClient = new VkApi();
+            
+            serviceCollection.AddAudioBypass(); 
+            var vkClient = new VkApi(serviceCollection);
+            
             await vkClient.AuthorizeAsync(new ApiAuthParams
             {
-                ApplicationId = vkConfiguration.ApplicationId,
                 Login = vkConfiguration.Login,
                 Password = vkConfiguration.Password,
-                Settings = Settings.All
             });
-
+            
             serviceCollection.AddSingleton<IVkApi>(vkClient);
         }
 
