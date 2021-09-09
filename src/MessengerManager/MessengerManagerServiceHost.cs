@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MessengerManager.Core.Configurations.Telegram;
 using MessengerManager.Core.Configurations.Vk;
 using MessengerManager.Core.Handlers.TelegramHandlers;
+using MessengerManager.Core.Handlers.VkHandlers;
 using MessengerManager.Core.Services.TelegramManager;
 using MessengerManager.Domain.Entities;
 using MessengerManager.Domain.Interfaces;
@@ -72,6 +73,7 @@ namespace MessengerManager
         {
             serviceCollection.AddScoped<IGenericRepository<ChatThreadEntity>, EfGenericRepository<ChatThreadEntity>>();
             serviceCollection.AddScoped<IGenericRepository<MessageEntity>, EfGenericRepository<MessageEntity>>();
+            serviceCollection.AddScoped<IGenericRepository<UserEntity>, EfGenericRepository<UserEntity>>();
         }
         
         public virtual async Task ConfigureDbContext(IServiceCollection serviceCollection)
@@ -120,6 +122,10 @@ namespace MessengerManager
             });
             
             serviceCollection.AddSingleton<IVkApi>(vkClient);
+            
+            serviceCollection.AddScoped<VkSyncChatThreadsHandler>();
+            serviceCollection.AddScoped<VkSyncMessagesHandler>();
+            serviceCollection.AddScoped<VkSyncUserHandler>();
         }
 
         private void AddTelegramHandlers(IServiceCollection serviceCollection)
@@ -140,6 +146,8 @@ namespace MessengerManager
             serviceCollection.AddScoped<ITelegramBotManager, TelegramBotManager>();
 
             serviceCollection.AddSingleton<TelegramMessageHandler>();
+            
+            serviceCollection.AddScoped<TelegramSyncMessagesHandler>();
         }
     }
 }
