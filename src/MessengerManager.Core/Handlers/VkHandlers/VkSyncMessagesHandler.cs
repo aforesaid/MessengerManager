@@ -46,6 +46,8 @@ namespace MessengerManager.Core.Handlers.VkHandlers
         {
             try
             {
+                _logger.LogInformation("Начинаю синхронизацию сообщений с Vk");
+
                 var existChats = _chatsRepo.GetAll();
 
                 foreach (var chat in existChats)
@@ -67,6 +69,8 @@ namespace MessengerManager.Core.Handlers.VkHandlers
                     }
                     
                 }
+                _logger.LogInformation("Синхронизация сообщений с БД успешно завершена");
+
             }
             catch (Exception e)
             {

@@ -46,6 +46,8 @@ namespace MessengerManager.Core.Handlers.VkHandlers
         {
             try
             {
+                _logger.LogInformation("Начинаю синхронизацию пользователей с Vk");
+
                 var allUsers = await _vkBotManager.GetAllUsers();
                 foreach (var user in allUsers)
                 {
@@ -68,6 +70,8 @@ namespace MessengerManager.Core.Handlers.VkHandlers
 
                     await _unitOfWork.SaveChangesAsync();
                 }
+                
+                _logger.LogInformation("Синхронизация пользователей успешно завершена");
             }
             catch (Exception e)
             {
