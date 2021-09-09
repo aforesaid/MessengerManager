@@ -106,6 +106,13 @@ namespace MessengerManager
         {
             var vkConfiguration = _configuration.GetSection(nameof(VkConfiguration))
                 .Get<VkConfiguration>();
+
+            serviceCollection.Configure<VkConfiguration>(opt =>
+            {
+                opt.Login = vkConfiguration.Login;
+                opt.Password = vkConfiguration.Password;
+                opt.MyVkUsername = vkConfiguration.MyVkUsername;
+            });
             
             serviceCollection.AddAudioBypass(); 
             var vkClient = new VkApi(serviceCollection);
