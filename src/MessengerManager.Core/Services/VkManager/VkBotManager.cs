@@ -146,5 +146,24 @@ namespace MessengerManager.Core.Services.VkManager
                 throw;
             }
         }
+
+        public async Task<long> SendMessage(long vkPeerId, string text)
+        {
+            try
+            {
+                var response = await _vkApi.Messages.SendAsync(new MessagesSendParams
+                {
+                    PeerId = vkPeerId,
+                    Message = text,
+                    RandomId = new Random().Next(0, int.MaxValue)
+                });
+                return response;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Не удалось отправить сообщение");
+                throw;
+            }
+        }
     }
 }

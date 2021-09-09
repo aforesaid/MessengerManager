@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MessengerManager.Core.Configurations.Telegram;
@@ -18,10 +17,7 @@ using Telegram.Bot.Types.Enums;
 using VkNet;
 using VkNet.Abstractions;
 using VkNet.AudioBypassService.Extensions;
-using VkNet.Enums.Filters;
-using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
-using VkNet.Model.RequestParams;
 
 namespace MessengerManager
 {

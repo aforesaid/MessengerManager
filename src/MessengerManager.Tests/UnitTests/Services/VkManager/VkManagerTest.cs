@@ -74,5 +74,18 @@ namespace MessengerManager.Tests.UnitTests.Services.VkManager
             Assert.NotNull(users.First().LastName);
             Assert.NotNull(users.First().UniqueId);
         }
+
+        [Fact]
+        public async Task SendMessage()
+        {
+            var chats = await _vkBotManager.GetAllChats();
+
+            var vkPeerId = chats.First().VkPeerId;
+            var message = "TestMessage";
+
+            var response = await _vkBotManager.SendMessage(vkPeerId, message);
+            
+            Assert.NotEqual(0, response);
+        }
     }
 }

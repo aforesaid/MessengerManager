@@ -24,10 +24,12 @@ namespace MessengerManager.Core.Services.VkManager
         /// </summary>
         /// <returns></returns>
         Task<ApiVkUser[]> GetAllUsers();
-
-
-
-        //TODO: читать все чаты, фильтровать только нужные
-        //TODO: все сообщения по фильтрованным чатам переносить в Telegram
+        /// <summary>
+        /// Отправка сообщения по vkPeerId
+        /// </summary>
+        /// <param name="vkPeerId"></param>
+        /// <param name="text"></param>
+        /// <returns>Id отправленного сообщения</returns>
+        Task<long> SendMessage(long vkPeerId, string text);
     }
 }
