@@ -6,6 +6,7 @@ using MessengerManager.Core.Configurations.Vk;
 using MessengerManager.Core.Handlers.TelegramHandlers;
 using MessengerManager.Core.Handlers.VkHandlers;
 using MessengerManager.Core.Services.TelegramManager;
+using MessengerManager.Core.Services.VkManager;
 using MessengerManager.Domain.Entities;
 using MessengerManager.Domain.Interfaces;
 using MessengerManager.Infrastructure.Data;
@@ -140,6 +141,8 @@ namespace MessengerManager
             serviceCollection.AddSingleton<VkSyncChatThreadsHandler>();
             serviceCollection.AddSingleton<VkSyncMessagesHandler>();
             serviceCollection.AddSingleton<VkSyncUserHandler>();
+
+            serviceCollection.AddScoped<IVkBotManager, VkBotManager>();
         }
 
         private void AddTelegramHandlers(IServiceCollection serviceCollection)
