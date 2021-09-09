@@ -37,5 +37,9 @@
             UniqueId = uniqueId;
             SetUpdated();
         }
+        public override string ToString()
+        {
+            return $"{Name} {LastName}|@{UniqueId}";
+        }
     }
 }
