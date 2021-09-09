@@ -116,5 +116,35 @@ namespace MessengerManager.Core.Services.VkManager
                 throw;
             }
         }
+
+        public async Task<ApiVkUser[]> GetAllUsers()
+        {
+            try
+            {
+                var allChats =  await GetAllChats();
+
+                var listUsers = new List<ApiVkUser>();
+                
+                foreach (var chat in allChats)
+                {
+                    var usersFromConversations = await _vkApi.Messages.GetConversationMembersAsync(chat.VkPeerId);
+                    var newUsers = usersFromConversations.Profiles.Select(x =>
+                        new ApiVkUser(x.FirstName, x.LastName, x.ScreenName, x.Id))
+                        .ToArray();
+                    listUsers.AddRange(newUsers);
+                }
+
+                var result = listUsers.GroupBy(x => x.UniqueId)
+                    .Select(i => i.First())
+                    .ToArray();
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Не удалось получить всех связанных пользователей");
+                throw;
+            }
+        }
     }
 }

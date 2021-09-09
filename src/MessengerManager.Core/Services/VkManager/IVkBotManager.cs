@@ -19,6 +19,12 @@ namespace MessengerManager.Core.Services.VkManager
         /// <param name="count"></param>
         /// <returns></returns>
         Task<ApiVkMessage[]> GetMessages(long vkPeerId, int count = 200);
+        /// <summary>
+        /// Получение всех пользователей, связанных с главным аккаунтом
+        /// </summary>
+        /// <returns></returns>
+        Task<ApiVkUser[]> GetAllUsers();
+
 
 
         //TODO: читать все чаты, фильтровать только нужные
