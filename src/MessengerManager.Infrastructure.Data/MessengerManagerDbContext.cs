@@ -36,9 +36,8 @@ namespace MessengerManager.Infrastructure.Data
             
             //MessageEntity
             modelBuilder.Entity<MessageEntity>().HasKey(x => x.Id);
-            modelBuilder.Entity<MessageEntity>().HasIndex(x => x.Owner);
+            modelBuilder.Entity<MessageEntity>().HasIndex(x => x.UserId);
             modelBuilder.Entity<MessageEntity>().HasIndex(x => x.Sent);
-            modelBuilder.Entity<MessageEntity>().HasIndex(x => x.ChatThreadName);
             modelBuilder.Entity<MessageEntity>().HasIndex(x => x.Date);
             modelBuilder.Entity<MessageEntity>().HasIndex(x => x.VkPeerId);
             

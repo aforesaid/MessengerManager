@@ -11,7 +11,6 @@ namespace MessengerManager.Core.Services.VkManager
         /// <param name="withFullDetails"></param>
         /// <returns></returns>
         Task<ApiVkChat[]> GetAllChats();
-
         /// <summary>
         /// Получение сообщений из чата
         /// </summary>

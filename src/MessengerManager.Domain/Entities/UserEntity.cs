@@ -19,5 +19,23 @@
         public string LastName { get; private set; }
         public string UniqueId { get; private set; }
         public long UserId { get; private set; }
+
+        public void UpdateName(string name)
+        {
+            Name = name;
+            SetUpdated();
+        }
+
+        public void UpdateLastName(string lastName)
+        {
+            LastName = lastName;
+            SetUpdated();
+        }
+
+        public void UpdateUniqueId(string uniqueId)
+        {
+            UniqueId = uniqueId;
+            SetUpdated();
+        }
     }
 }
