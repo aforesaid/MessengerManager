@@ -64,9 +64,6 @@ namespace MessengerManager.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ChatThreadName")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
 
@@ -76,8 +73,8 @@ namespace MessengerManager.Infrastructure.Data.Migrations
                     b.Property<bool>("Inactive")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Owner")
-                        .HasColumnType("text");
+                    b.Property<long>("MessageId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("Sent")
                         .HasColumnType("boolean");
@@ -88,18 +85,19 @@ namespace MessengerManager.Infrastructure.Data.Migrations
                     b.Property<DateTime>("Updated")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("VkPeerId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatThreadName");
-
                     b.HasIndex("Date");
 
-                    b.HasIndex("Owner");
-
                     b.HasIndex("Sent");
+
+                    b.HasIndex("UserId");
 
                     b.HasIndex("VkPeerId");
 
