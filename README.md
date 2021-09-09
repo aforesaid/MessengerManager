@@ -15,6 +15,16 @@
         "Token": "Token бота",
         "MainChatId": "ChatId канала",
         "SupportChatId": "ChatId группы"
-    }
+    },
+    "VkConfiguration": {
+    "Login": "login@login.ru",
+    "Password": "password",
+    "MyVkUsername": "username"
+  }
 }
 ```
+### Features
+
+- Добавить поддержку Docker
+- Отладить сервис
+- Доработать функционал по необходимости (перенос фото и тп)
