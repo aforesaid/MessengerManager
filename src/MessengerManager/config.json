@@ -1,0 +1,13 @@
+﻿{
+    "POSTGRESQL": "User ID=postgres;Password=root;Server=localhost;Port=5432;Database=itlab-backS-dev-db;Integrated Security=true;",
+    "Telegram": {
+        "Token": "",
+        "MainChatId": "",
+        "SupportChatId": ""
+    },
+    "VkConfiguration": {
+        "ApplicationId": 123456,
+        "Login": "login@login.ru",
+        "Password": "password"
+    }
+}
