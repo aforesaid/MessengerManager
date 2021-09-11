@@ -1,15 +1,23 @@
 ﻿using System.Threading.Tasks;
-using MessengerManager.Core.Models.Messengers.Shared;
+using MessengerManager.Core.Models.Messengers.Telegram;
 
 namespace MessengerManager.Core.Services.TelegramManager
 {
     public interface ITelegramBotManager
     {
         /// <summary>
-        /// Отправка сообщения в тг
+        /// Создание чата в тг
         /// </summary>
-        /// <param name="telegramMessage"></param>
-        /// <returns>Null - не было отправлено в тред, вероятно был создан новый тред</returns>
-        Task<int?> SendMessage(ApiTelegramMessage telegramMessage);
+        /// <param name="telegramMakeChat"></param>
+        /// <param name="chatExist"></param>
+        /// <returns>Id созданного сообщения</returns>
+        Task<int> MakeChat(ApiTelegramMakeChat telegramMakeChat);
+        /// <summary>
+        /// Отправка сообщения к чату
+        /// </summary>
+        /// <param name="telegramSendMessage"></param>
+        /// <returns>Id созданного сообщения</returns>
+        Task<int> SendMessageInSupportChat(ApiTelegramSendMessage telegramSendMessage);
+
     }
 }

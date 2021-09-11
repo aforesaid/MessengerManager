@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MessengerManager.Core.Configurations.Telegram;
-using MessengerManager.Core.Models.Messengers.Shared;
-using MessengerManager.Domain.Entities;
-using MessengerManager.Domain.Interfaces;
+using MessengerManager.Core.Models.Messengers.Telegram;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -15,53 +13,46 @@ namespace MessengerManager.Core.Services.TelegramManager
     {
         private readonly ITelegramBotClient _telegramBotClient;
         private readonly TelegramConfiguration _telegramConfiguration;
-        private readonly IGenericRepository<ChatThreadEntity> _chatThreadRepository;
         private readonly ILogger<TelegramBotManager> _logger;
 
         public TelegramBotManager(ITelegramBotClient telegramBotClient, 
-            ILogger<TelegramBotManager> logger,
-            IGenericRepository<ChatThreadEntity> chatThreadRepository, 
+            ILogger<TelegramBotManager> logger, 
             IOptions<TelegramConfiguration> telegramConfiguration)
         {
             _telegramBotClient = telegramBotClient;
             _logger = logger;
-            _chatThreadRepository = chatThreadRepository;
             _telegramConfiguration = telegramConfiguration.Value;
         }
 
-        public async Task<int?> SendMessage(ApiTelegramMessage telegramMessage)
+        public async Task<int> MakeChat(ApiTelegramMakeChat telegramMakeChat)
         {
             try
             {
-                var existThreadDetail = await _chatThreadRepository.GetAll()
-                    .FirstOrDefaultAsync(x => x.ThreadName == telegramMessage.ChatName);
-                
-                if (existThreadDetail == null)
-                {
-                    var canMakeThisThread = true;
-                    //TODO: добавить список поддерживаемых thread-ов
-                    if (canMakeThisThread)
-                    {
-                        var response = await _telegramBotClient.SendTextMessageAsync(_telegramConfiguration.MainChatId, 
-                            telegramMessage.ChatName);
-                        
-                        return response.MessageId;
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Не могу создать чат с названием {0}", telegramMessage.ChatName);
-                        return null;
-                    }
-                }
-              
-                var responseMessage = await _telegramBotClient.SendTextMessageAsync(existThreadDetail.TelegramSupChatId, 
-                    telegramMessage.Text, replyToMessageId: existThreadDetail.MessageId);
-                return null;
+                var response = await _telegramBotClient.SendTextMessageAsync(_telegramConfiguration.MainChatId, 
+                    telegramMakeChat.ChatName);
+                            
+                return response.MessageId;
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Не удалось отправить сообщение в канал, message: {0}",
-                    telegramMessage);
+                _logger.LogError(e, "Не удалось создать чат с названием {0}", telegramMakeChat.ChatName);
+                throw;
+            }
+        }
+
+        public async Task<int> SendMessageInSupportChat(ApiTelegramSendMessage telegramSendMessage)
+        {
+            try
+            {
+                var response = await _telegramBotClient.SendTextMessageAsync(_telegramConfiguration.SupportChatId, 
+                    telegramSendMessage.ToString(), replyToMessageId: telegramSendMessage.MessageId);
+                            
+                return response.MessageId;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Не удалось отправить сообщение текстом {0} к сообщению {1}", 
+                    telegramSendMessage.ToString(), telegramSendMessage.MessageId);
                 throw;
             }
         }

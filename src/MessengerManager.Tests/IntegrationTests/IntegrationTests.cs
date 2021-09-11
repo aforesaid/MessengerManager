@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MessengerManager.Core.Models.Messengers.Shared;
+using MessengerManager.Core.Models.Messengers.Telegram;
 using MessengerManager.Core.Services.TelegramManager;
 using MessengerManager.Domain.Entities;
 using MessengerManager.Domain.Interfaces;
@@ -39,8 +39,8 @@ namespace MessengerManager.Tests.IntegrationTests
 
             var existChat = chatThreadRepo.GetAll().FirstOrDefault(x => x.ThreadName == "test");
 
-            var request = new ApiTelegramMessage("Yuri", "TestText", existChat?.ThreadName, DateTime.Now);
-            await manager.SendMessage(request);
+            var request = new ApiTelegramMakeChat(existChat?.ThreadName);
+            await manager.MakeChat(request);
         }
         [Test]
         public async Task MakeThread()
@@ -49,12 +49,12 @@ namespace MessengerManager.Tests.IntegrationTests
 
             var manager = _testHost.ServiceProvider.GetRequiredService<ITelegramBotManager>();
 
-            var request = new ApiTelegramMessage("Yuri", "TestText", Guid.NewGuid().ToString(), DateTime.Now);
-            await manager.SendMessage(request);
+            var request = new ApiTelegramMakeChat("Yuri");
+            await manager.MakeChat(request);
             
             await Task.Delay(10000);
             
-            await manager.SendMessage(request);
+            await manager.MakeChat(request);
         }
 
         public void Dispose()

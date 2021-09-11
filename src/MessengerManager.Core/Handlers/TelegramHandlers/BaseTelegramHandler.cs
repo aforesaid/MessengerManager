@@ -12,17 +12,17 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
     {
         public static async Task StartHandler(ITelegramBotClient telegramBotClient,
             UpdateType updateType,
-            Action<ITelegramBotClient, Update, CancellationToken> updateAction,
-            Action<ITelegramBotClient, Exception, CancellationToken> errorAction,
-            CancellationToken token)
+            Func<ITelegramBotClient, Update, CancellationToken, Task> updateAction,
+            Func<ITelegramBotClient, Exception, CancellationToken, Task> errorAction,
+            CancellationToken cancellationToken)
         {
             var receiverOptions = new ReceiverOptions
             {
                 AllowedUpdates = new[] {updateType},
                 ThrowPendingUpdates = true
             };
-
-            await telegramBotClient.ReceiveAsync(updateAction,errorAction, receiverOptions, token);
+            
+            await telegramBotClient.ReceiveAsync(updateAction,errorAction, receiverOptions, cancellationToken);
         }
     }
 }

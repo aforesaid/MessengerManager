@@ -22,7 +22,7 @@ namespace MessengerManager.Core.Handlers.VkHandlers
         private readonly IVkBotManager _vkBotManager;
         
         private Timer _timer;
-        private const int TimerTime = 60 * 1000 * 10;
+        private const int TimerTime = 60 * 1000 * 100;
         public VkSyncUserHandler(ILogger<VkSyncUserHandler> logger, 
             IGenericRepository<UserEntity> usersRepository, 
             IUnitOfWork unitOfWork, 

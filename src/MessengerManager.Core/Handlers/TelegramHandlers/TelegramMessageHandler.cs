@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using MessengerManager.Domain.Entities;
 using MessengerManager.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -23,12 +24,11 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
             _logger = logger;
         }
 
-        public async void ErrorHandler(ITelegramBotClient telegramBotClient, Exception exception, CancellationToken cancellationToken)
+        public async Task ErrorHandler(ITelegramBotClient telegramBotClient, Exception exception, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
         }
 
-        public async void UpdateHandler(ITelegramBotClient telegramBotClient, Update update,
+        public async Task UpdateHandler(ITelegramBotClient telegramBotClient, Update update,
             CancellationToken cancellationToken)
         {
             const int telegramId = 777000;
@@ -47,7 +47,7 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
                         nameof(TelegramMessageHandler), chatThreadName);
                     return;
                 }
-
+                
                 var newThread = new ChatThreadEntity(update.Message.Chat.Id.ToString(), update.Message.Text,
                     update.Message.MessageId);
                 

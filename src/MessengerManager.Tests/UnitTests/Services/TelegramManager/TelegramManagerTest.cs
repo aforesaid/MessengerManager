@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MessengerManager.Core.Configurations.Telegram;
 using MessengerManager.Core.Handlers.TelegramHandlers;
-using MessengerManager.Core.Models.Messengers.Shared;
+using MessengerManager.Core.Models.Messengers.Telegram;
 using MessengerManager.Core.Services.TelegramManager;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -33,15 +33,15 @@ namespace MessengerManager.Tests.UnitTests.Services.TelegramManager
             var option = Options.Create(_telegramConfiguration);
             
             //TODO: домочить тесты
-            _telegramBotManager = new TelegramBotManager(_telegramBotClient, mockLogger.Object, null, null);
+            _telegramBotManager = new TelegramBotManager(_telegramBotClient, mockLogger.Object, null);
         }
 
         [Fact]
         public async Task SendMessage()
         {
             await Setup();
-            var request = new ApiTelegramMessage("text", "text", "text", DateTime.Now);
-            var messageId = await _telegramBotManager.SendMessage(request);
+            var request = new ApiTelegramMakeChat("text");
+            var messageId = await _telegramBotManager.MakeChat(request);
             Console.ReadKey();
         }
         private async Task Setup()

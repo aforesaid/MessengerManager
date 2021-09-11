@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +10,7 @@ namespace MessengerManager
     {
         static async Task Main()
         {
+            
             var config = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
                 .AddJsonFile("config.json")

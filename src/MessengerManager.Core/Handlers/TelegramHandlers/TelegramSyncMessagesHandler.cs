@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-using MessengerManager.Core.Models.Messengers.Shared;
+using MessengerManager.Core.Models.Messengers.Telegram;
 using MessengerManager.Core.Services.TelegramManager;
 using MessengerManager.Domain.Entities;
 using MessengerManager.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MessengerManager.Core.Handlers.TelegramHandlers
@@ -23,7 +24,7 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
         private readonly IUnitOfWork _unitOfWork;
         
         private Timer _timer;
-        private const int TimerTime = 60 * 1000 * 10;
+        private const int TimerTime = 60 * 1000 * 1;
 
         public TelegramSyncMessagesHandler(ILogger<TelegramSyncMessagesHandler> logger,
             IGenericRepository<ChatThreadEntity> chatsRepo, 
@@ -55,6 +56,7 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
                 _logger.LogInformation("Начинаю синхронизацию с Tg");
 
                 var chats = _chatsRepo.GetAll()
+                    .AsNoTracking()
                     .Where(x => x.VkPeerId != default);
                 var messages = _messagesRepo.GetAll()
                     .Where(x => !x.Sent && x.UserId != default && x.VkPeerId != default);
@@ -68,17 +70,13 @@ namespace MessengerManager.Core.Handlers.TelegramHandlers
                     var from = item.user.ToString();
                     var text = item.message.Text;
                     var date = item.message.Date;
-                    var chatName = item.chat.ThreadName;
+                    var messageId = item.chat.MessageId;
 
-                    var request = new ApiTelegramMessage(from, text, chatName, date);
-                    var response = await _telegramBotManager.SendMessage(request);
-
-                    if (response.HasValue)
-                    {
-                        item.message.SetSent();
-                        _messagesRepo.Update(item.message);
-                        await  _unitOfWork.SaveChangesAsync();
-                    }
+                    var request = new ApiTelegramSendMessage(from, text, date, messageId);
+                    await _telegramBotManager.SendMessageInSupportChat(request);
+                    
+                    item.message.SetSent();
+                    _messagesRepo.Update(item.message);
                 }
                 
                 _logger.LogInformation("Синхронизация сообщений с Tg успешно завершена");

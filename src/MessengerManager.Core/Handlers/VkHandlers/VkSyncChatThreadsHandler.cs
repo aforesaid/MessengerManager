@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-using MessengerManager.Core.Models.Messengers.Shared;
+using MessengerManager.Core.Models.Messengers.Telegram;
 using MessengerManager.Core.Models.Messengers.Vk;
 using MessengerManager.Core.Services.TelegramManager;
 using MessengerManager.Core.Services.VkManager;
@@ -19,6 +19,7 @@ namespace MessengerManager.Core.Handlers.VkHandlers
     {
         private readonly ILogger<VkSyncChatThreadsHandler> _logger;
         private readonly IGenericRepository<ChatThreadEntity> _chatRepo;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ITelegramBotManager _telegramBotManager;
         private readonly IVkBotManager _vkBotManager;
 
@@ -28,12 +29,13 @@ namespace MessengerManager.Core.Handlers.VkHandlers
         public VkSyncChatThreadsHandler(ILogger<VkSyncChatThreadsHandler> logger,
             IGenericRepository<ChatThreadEntity> chatRepo,
             ITelegramBotManager telegramBotManager,
-            IVkBotManager vkBotManager)
+            IVkBotManager vkBotManager, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _chatRepo = chatRepo;
             _telegramBotManager = telegramBotManager;
             _vkBotManager = vkBotManager;
+            _unitOfWork = unitOfWork;
         }
 
         public void SetTimer()
@@ -50,15 +52,27 @@ namespace MessengerManager.Core.Handlers.VkHandlers
             try
             {
                 _logger.LogInformation("Начинаю синхронизацию чатов с Vk");
-
+                const int limitCount = 10;
+                var currentItems = 0;
                 var chats = await _vkBotManager.GetAllChats();
                 foreach (var chat in chats)
                 {
+                    if (currentItems > limitCount)
+                        break;
+                    
                     var existChat = _chatRepo.GetAll()
                         .FirstOrDefault(x => x.ThreadName == chat.ChatThreadName);
                     if (existChat == null)
                     {
                         await MakeChatThread(chat);
+                        currentItems++;
+                    }
+                    else
+                    {
+                        existChat.UpdateVkPeerId(chat.VkPeerId);
+                        _chatRepo.Update(existChat);
+
+                        await _unitOfWork.SaveChangesAsync();
                     }
                 }
                 _logger.LogInformation("Синхронизация чатов успешно завершена");
@@ -73,8 +87,9 @@ namespace MessengerManager.Core.Handlers.VkHandlers
 
         private async Task MakeChatThread(ApiVkChat chat)
         {
-            var request = new ApiTelegramMessage(null, null, chat.ChatThreadName, DateTime.Now);
-            await _telegramBotManager.SendMessage(request);
+            await Task.Delay(new Random().Next(1500, 2500));
+            var request = new ApiTelegramMakeChat(chat.ChatThreadName);
+            await _telegramBotManager.MakeChat(request);
         }
 
         public void Dispose()

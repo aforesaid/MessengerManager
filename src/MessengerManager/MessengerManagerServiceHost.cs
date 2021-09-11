@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MessengerManager.Core.Configurations.Telegram;
@@ -36,6 +37,8 @@ namespace MessengerManager
 
         public virtual async Task Start(CancellationToken token)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             var serviceCollection = new ServiceCollection();
 
             AddLogging(serviceCollection);
@@ -49,7 +52,7 @@ namespace MessengerManager
 
             
             ConfigureHandlers(token);
-            ConfigureSyncHandlers();
+            await ConfigureSyncHandlers();
         }
 
         public virtual void AddLogging(IServiceCollection serviceCollection)
@@ -86,17 +89,17 @@ namespace MessengerManager
             await dbContext.Database.MigrateAsync();
         }
 
-        public virtual void ConfigureHandlers(CancellationToken token)
+        public virtual void ConfigureHandlers(CancellationToken cancellationToken)
         {
             var telegramBotClient = ServiceProvider.GetRequiredService<ITelegramBotClient>();
             var telegramMessageHandler = ServiceProvider.GetRequiredService<TelegramMessageHandler>();
 
             BaseTelegramHandler.StartHandler(telegramBotClient, UpdateType.Message,
-                telegramMessageHandler.UpdateHandler, telegramMessageHandler.ErrorHandler, token)
+                telegramMessageHandler.UpdateHandler, telegramMessageHandler.ErrorHandler, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public virtual void ConfigureSyncHandlers()
+        public virtual async Task ConfigureSyncHandlers()
         {
             var telegramSyncMessagesHandler = ServiceProvider.GetRequiredService<TelegramSyncMessagesHandler>();
             telegramSyncMessagesHandler.SetTimer();
@@ -107,6 +110,8 @@ namespace MessengerManager
             vkSyncMessagesHandler.SetTimer();
             var vkSyncUsersHandler = ServiceProvider.GetRequiredService<VkSyncUserHandler>();
             vkSyncUsersHandler.SetTimer();
+
+            await vkSyncChatThreadHandler.SyncChats();
         }
         public virtual async Task AddServices(IServiceCollection serviceCollection)
         {
@@ -160,7 +165,7 @@ namespace MessengerManager
             var telegramClient = new TelegramBotClient(telegramConfiguration.Token);
 
             serviceCollection.AddSingleton<ITelegramBotClient>(telegramClient);
-            serviceCollection.AddScoped<ITelegramBotManager, TelegramBotManager>();
+            serviceCollection.AddSingleton<ITelegramBotManager, TelegramBotManager>();
 
             serviceCollection.AddSingleton<TelegramMessageHandler>();
             

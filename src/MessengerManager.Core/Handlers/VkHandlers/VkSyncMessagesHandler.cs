@@ -22,7 +22,7 @@ namespace MessengerManager.Core.Handlers.VkHandlers
         private readonly IVkBotManager _vkBotManager;
 
         private Timer _timer;
-        private const int TimerTime = 60 * 1000 * 10;
+        private const int TimerTime = 60 * 1000 * 1;
         public VkSyncMessagesHandler(ILogger<VkSyncMessagesHandler> logger, 
             IGenericRepository<MessageEntity> messagesRepo,
             IUnitOfWork unitOfWork,
@@ -48,7 +48,9 @@ namespace MessengerManager.Core.Handlers.VkHandlers
             {
                 _logger.LogInformation("Начинаю синхронизацию сообщений с Vk");
 
-                var existChats = _chatsRepo.GetAll();
+                var existChats = _chatsRepo.GetAll()
+                    .Where(x => x.VkPeerId != default)
+                    .ToArray();
 
                 foreach (var chat in existChats)
                 {
@@ -82,7 +84,8 @@ namespace MessengerManager.Core.Handlers.VkHandlers
         {
             return message.Date.HasValue &&
                    message.MessageId.HasValue &&
-                   message.UserId.HasValue;
+                   message.UserId.HasValue &&
+                   !string.IsNullOrWhiteSpace(message.Title);
         }
 
         public void Dispose()
